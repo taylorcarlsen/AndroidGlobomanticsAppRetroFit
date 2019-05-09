@@ -4,7 +4,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ServiceBuilder{
-    private static String URL = "http://10.5.139.22:52788/";
+    private static String URL = "http://localhost:52788/";
     private static Retrofit.Builder builder = new Retrofit.Builder().baseUrl(URL)
             .addConverterFactory(GsonConverterFactory.create());
 
