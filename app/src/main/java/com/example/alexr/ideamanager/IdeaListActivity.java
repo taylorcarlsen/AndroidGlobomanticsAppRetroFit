@@ -55,13 +55,13 @@ public class IdeaListActivity extends AppCompatActivity {
             mTwoPane = true;
         }
 
-        HashMap<String, String> filters = new HashMap<>();
+        /*HashMap<String, String> filters = new HashMap<>();
         filters.put("owner","Jim");
-        filters.put("count","1");
+        filters.put("count","1");*/
 
         // Using the idea service to request data
         IdeaService ideaService = ServiceBuilder.builderService(IdeaService.class);
-        Call<List<Idea>> ideasRequest = ideaService.getIdeas(filters);
+        Call<List<Idea>> ideasRequest = ideaService.getIdeas();
 
         ideasRequest.enqueue(new Callback<List<Idea>>() {
             @Override

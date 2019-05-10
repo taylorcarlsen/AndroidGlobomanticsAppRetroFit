@@ -9,11 +9,18 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import com.example.alexr.ideamanager.Services.IdeaService;
+import com.example.alexr.ideamanager.Services.ServiceBuilder;
 import com.example.alexr.ideamanager.helpers.SampleContent;
 import com.example.alexr.ideamanager.models.Idea;
 
 import java.util.Random;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class IdeaCreateActivity extends AppCompatActivity {
 
@@ -23,7 +30,7 @@ public class IdeaCreateActivity extends AppCompatActivity {
         setContentView(R.layout.activity_idea_create);
         Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
         setSupportActionBar(toolbar);
-        final Context context = this;
+        final Context mContext = this;
 
         // Show the Up button in the action bar.
         ActionBar actionBar = getSupportActionBar();
@@ -46,10 +53,22 @@ public class IdeaCreateActivity extends AppCompatActivity {
                 newIdea.setStatus(ideaStatus.getText().toString());
                 newIdea.setOwner(ideaOwner.getText().toString());
 
-                SampleContent.createIdea(newIdea);
+                IdeaService ideaService = ServiceBuilder.builderService(IdeaService.class);
+                Call<Idea> createRequest = ideaService.createIdea(newIdea);
 
-                Intent intent = new Intent(context, IdeaListActivity.class);
-                startActivity(intent);
+                createRequest.enqueue(new Callback<Idea>() {
+                    @Override
+                    // If successful send the user to the home screen
+                    public void onResponse(Call<Idea> request, Response<Idea> response) {
+                        Intent intent = new Intent(mContext, IdeaListActivity.class);
+                        startActivity(intent);
+                    }
+
+                    @Override
+                    public void onFailure(Call<Idea> request, Throwable t) {
+                        Toast.makeText(mContext, "Failed to create item.", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
     }
